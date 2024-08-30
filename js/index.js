@@ -46,6 +46,49 @@ function calcularCosto(planSeleccionado, edad, incluyeDental, incluyeVision) {
 
   return costoTotal;
 }
+// Función para generar las fechas y horarios disponibles
+function generarFechasYHorarios() {
+  const fechasYHorarios = [];
+  const fechaInicial = new Date(2024, 8, 9);
+
+  for (let i = 0; i < 5; i++) {
+    const fecha = new Date(fechaInicial);
+    fecha.setDate(fechaInicial.getDate() + i);
+
+    // Generar horarios desde las 9 a.m. hasta las 12 p.m. en intervalos de una hora
+    for (let hora = 9; hora <= 12; hora++) {
+      const horario = new Date(fecha);
+      horario.setHours(hora, 0, 0);
+      fechasYHorarios.push(horario);
+    }
+  }
+
+  return fechasYHorarios;
+}
+// Función para mostrar las fechas y horarios disponibles
+function mostrarFechasYHorariosDisponibles() {
+  const fechasYHorarios = generarFechasYHorarios();
+  let mensaje = "Por favor, elija una fecha y horario disponible:\n";
+
+  fechasYHorarios.forEach((fechaHora, index) => {
+    mensaje += `${index + 1}. ${fechaHora.toLocaleString()}\n`;
+  });
+
+  let seleccionFechaHora;
+  while (true) {
+    seleccionFechaHora = parseInt(prompt(mensaje));
+    if (seleccionFechaHora > 0 && seleccionFechaHora <= fechasYHorarios.length) {
+      const fechaSeleccionada = fechasYHorarios[seleccionFechaHora - 1].toLocaleString();
+      alert(`Has seleccionado la fecha y horario: ${fechaSeleccionada}`);
+      
+      // Confirmación de agendado
+      alert("Su turno ha sido agendado, le esperamos. Muchas Gracias.");
+      break;
+    } else {
+      alert("Por favor, seleccione una opción válida.");
+    }
+  }
+}
 // Bienvenida
 alert("Bienvenido a nuestra obra social");
 
@@ -71,7 +114,7 @@ while (true) {
 alert(`Bienvenido, ${nombre} ${apellido}!`);
 
 alert(
-  "Procederemos a realizar una serie de preguntas para cotizar su obra social de eleccion."
+  "Procederemos a realizar una serie de preguntas para cotizar su obra social de elección."
 );
 
 let planSeleccionado;
@@ -84,6 +127,7 @@ while (true) {
   }
   alert("Por favor, ingrese un plan válido.");
 }
+
 let edad;
 while (true) {
   edad = parseInt(prompt("Ingrese su edad:"));
@@ -92,6 +136,7 @@ while (true) {
   }
   alert("Por favor, ingrese una edad válida (un número positivo).");
 }
+
 const incluyeDental = confirm("¿Desea incluir cobertura dental?");
 const incluyeVision = confirm("¿Desea incluir cobertura de visión?");
 const costoFinal = calcularCosto(
@@ -102,10 +147,10 @@ const costoFinal = calcularCosto(
 );
 alert(`El costo final es: $${costoFinal}`);
 
-//console.log
-console.log(nombre + " " + apellido);
-console.log(planSeleccionado);
-console.log(edad);
-console.log(incluyeDental);
-console.log(incluyeVision);
-console.log("El costo es de $", costoFinal);
+// Preguntar si desea continuar con el pedido del turno
+const continuarPedido = confirm("¿Desea continuar con el pedido de un turno?");
+if (continuarPedido) {
+  mostrarFechasYHorariosDisponibles();
+} else {
+  alert("Gracias por utilizar nuestro servicio. ¡Hasta pronto!");
+}
