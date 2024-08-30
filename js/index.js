@@ -46,6 +46,7 @@ function calcularCosto(planSeleccionado, edad, incluyeDental, incluyeVision) {
 
   return costoTotal;
 }
+
 // Función para generar las fechas y horarios disponibles
 function generarFechasYHorarios() {
   const fechasYHorarios = [];
@@ -65,6 +66,7 @@ function generarFechasYHorarios() {
 
   return fechasYHorarios;
 }
+
 // Función para mostrar las fechas y horarios disponibles
 function mostrarFechasYHorariosDisponibles() {
   const fechasYHorarios = generarFechasYHorarios();
@@ -75,11 +77,12 @@ function mostrarFechasYHorariosDisponibles() {
   });
 
   let seleccionFechaHora;
+  let fechaSeleccionada;
   while (true) {
     seleccionFechaHora = parseInt(prompt(mensaje));
     if (seleccionFechaHora > 0 && seleccionFechaHora <= fechasYHorarios.length) {
-      const fechaSeleccionada = fechasYHorarios[seleccionFechaHora - 1].toLocaleString();
-      alert(`Has seleccionado la fecha y horario: ${fechaSeleccionada}`);
+      fechaSeleccionada = fechasYHorarios[seleccionFechaHora - 1];
+      alert(`Has seleccionado la fecha y horario: ${fechaSeleccionada.toLocaleString()}`);
       
       // Confirmación de agendado
       alert("Su turno ha sido agendado, le esperamos. Muchas Gracias.");
@@ -88,7 +91,11 @@ function mostrarFechasYHorariosDisponibles() {
       alert("Por favor, seleccione una opción válida.");
     }
   }
+
+  // Mostrar la fecha seleccionada en la consola
+  console.log(`Su horario es: ${fechaSeleccionada.toLocaleString()}`);
 }
+
 // Bienvenida
 alert("Bienvenido a nuestra obra social");
 
@@ -154,3 +161,10 @@ if (continuarPedido) {
 } else {
   alert("Gracias por utilizar nuestro servicio. ¡Hasta pronto!");
 }
+//console.log
+console.log(nombre + " " + apellido);
+console.log(planSeleccionado);
+console.log(edad);
+console.log(incluyeDental);
+console.log(incluyeVision);
+console.log("El costo es de $", costoFinal);
