@@ -1,4 +1,4 @@
-//Variables y constantes globales
+// Variables y constantes globales
 const PLANES = [
   { nombre: "Plan V1", precio: 10000 },
   { nombre: "Plan V2", precio: 15000 },
@@ -50,7 +50,7 @@ function calcularCosto(planSeleccionado, edad, incluyeDental, incluyeVision) {
 // Función para generar las fechas y horarios disponibles
 function generarFechasYHorarios() {
   const fechasYHorarios = [];
-  const fechaInicial = new Date(2024, 8, 9);
+  const fechaInicial = new Date(2024, 8, 9); // 9 de Septiembre, 2024
 
   for (let i = 0; i < 5; i++) {
     const fecha = new Date(fechaInicial);
@@ -84,6 +84,9 @@ function mostrarFechasYHorariosDisponibles() {
       fechaSeleccionada = fechasYHorarios[seleccionFechaHora - 1];
       alert(`Has seleccionado la fecha y horario: ${fechaSeleccionada.toLocaleString()}`);
       
+      // Guardar la fecha seleccionada en localStorage
+      localStorage.setItem("fechaTurno", fechaSeleccionada.toLocaleString());
+
       // Confirmación de agendado
       alert("Su turno ha sido agendado, le esperamos. Muchas Gracias.");
       break;
@@ -99,11 +102,12 @@ function mostrarFechasYHorariosDisponibles() {
 // Bienvenida
 alert("Bienvenido a nuestra obra social");
 
-// Solicitar datos al usuario
+// Solicitar datos al usuario y almacenarlos en localStorage
 let nombre;
 while (true) {
   nombre = prompt("Ingrese su nombre:");
   if (nombre && nombre.trim() !== "") {
+    localStorage.setItem("nombre", nombre);
     break;
   }
   alert("Por favor, ingrese un nombre válido.");
@@ -113,6 +117,7 @@ let apellido;
 while (true) {
   apellido = prompt("Ingrese su apellido:");
   if (apellido && apellido.trim() !== "") {
+    localStorage.setItem("apellido", apellido);
     break;
   }
   alert("Por favor, ingrese un apellido válido.");
@@ -130,6 +135,7 @@ while (true) {
     "Ingrese el nombre del plan (Plan V1, Plan V2, Plan V3):"
   );
   if (PLANES.some((p) => p.nombre === planSeleccionado)) {
+    localStorage.setItem("planSeleccionado", planSeleccionado);
     break;
   }
   alert("Por favor, ingrese un plan válido.");
@@ -139,13 +145,18 @@ let edad;
 while (true) {
   edad = parseInt(prompt("Ingrese su edad:"));
   if (!isNaN(edad) && edad > 0) {
+    localStorage.setItem("edad", edad);
     break;
   }
   alert("Por favor, ingrese una edad válida (un número positivo).");
 }
 
 const incluyeDental = confirm("¿Desea incluir cobertura dental?");
+localStorage.setItem("incluyeDental", incluyeDental);
+
 const incluyeVision = confirm("¿Desea incluir cobertura de visión?");
+localStorage.setItem("incluyeVision", incluyeVision);
+
 const costoFinal = calcularCosto(
   planSeleccionado,
   edad,
@@ -153,6 +164,7 @@ const costoFinal = calcularCosto(
   incluyeVision
 );
 alert(`El costo final es: $${costoFinal}`);
+localStorage.setItem("costoFinal", costoFinal);
 
 // Preguntar si desea continuar con el pedido del turno
 const continuarPedido = confirm("¿Desea continuar con el pedido de un turno?");
@@ -161,10 +173,3 @@ if (continuarPedido) {
 } else {
   alert("Gracias por utilizar nuestro servicio. ¡Hasta pronto!");
 }
-//console.log
-console.log(nombre + " " + apellido);
-console.log(planSeleccionado);
-console.log(edad);
-console.log(incluyeDental);
-console.log(incluyeVision);
-console.log("El costo es de $", costoFinal);
