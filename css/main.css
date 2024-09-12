@@ -1,4 +1,9 @@
-/* General styling for the body */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f0f8ff;
@@ -9,9 +14,9 @@ body {
   color: #333;
 }
 
-/* Adding a slightly transparent background for readability */
+
 form, #resultado, #fechas-horarios {
-  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con transparencia */
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -21,21 +26,21 @@ form, #resultado, #fechas-horarios {
   margin-right: auto;
 }
 
-/* Heading style */
+
 h1 {
   text-align: center;
   color: #005f73;
   margin-top: 50px;
 }
 
-/* Label styling */
+
 label {
   display: block;
   margin: 10px 0 5px;
   font-weight: bold;
 }
 
-/* Input styling */
+
 input[type="text"],
 input[type="number"],
 select {
@@ -47,7 +52,7 @@ select {
   box-sizing: border-box;
 }
 
-/* Button styling */
+
 button {
   background-color: #007f5f;
   color: white;
@@ -62,7 +67,7 @@ button:hover {
   background-color: #009688;
 }
 
-/* Styling for the result and dates sections */
+
 #resultado {
   text-align: center;
   font-size: 18px;
@@ -71,7 +76,7 @@ button:hover {
 }
 
 #fechas-horarios {
-  display: none; /* Initially hidden */
+  display: none; 
 }
 
 #fechas {
@@ -82,7 +87,7 @@ button:hover {
   margin-bottom: 20px;
 }
 
-/* Footer styling */
+
 footer {
   text-align: center;
   margin-top: 40px;
