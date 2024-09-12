@@ -38,7 +38,7 @@ function calcularCosto(plan, edad, incluyeDental, incluyeVision) {
 // Función para generar las fechas y horarios disponibles
 function generarFechasYHorarios() {
   const fechasYHorarios = [];
-  const fechaInicial = new Date(2024, 8, 9); // 9 de Septiembre, 2024
+  const fechaInicial = new Date(2024, 8, 9);
 
   for (let i = 0; i < 5; i++) {
       const fecha = new Date(fechaInicial);
@@ -55,7 +55,7 @@ function generarFechasYHorarios() {
 
 // Evento cuando el formulario se envía
 document.getElementById("obra-social-form").addEventListener("submit", function(event) {
-  event.preventDefault(); // Evita el comportamiento predeterminado de recargar la página
+  event.preventDefault();
 
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;
