@@ -20,11 +20,11 @@ const COBERTURA_ADICIONAL = {
 function calcularCosto(plan, edad, incluyeDental, incluyeVision) {
   let factorEdad = 1;
   if (edad < 30) {
-    factorEdad = EDAD_FACTORES.menor30;
+      factorEdad = EDAD_FACTORES.menor30;
   } else if (edad <= 60) {
-    factorEdad = EDAD_FACTORES.entre30y60;
+      factorEdad = EDAD_FACTORES.entre30y60;
   } else {
-    factorEdad = EDAD_FACTORES.mayor60;
+      factorEdad = EDAD_FACTORES.mayor60;
   }
 
   let costoTotal = PLANES[plan] * factorEdad;
@@ -41,20 +41,22 @@ function generarFechasYHorarios() {
   const fechaInicial = new Date(2024, 8, 9); // 9 de Septiembre, 2024
 
   for (let i = 0; i < 5; i++) {
-    const fecha = new Date(fechaInicial);
-    fecha.setDate(fechaInicial.getDate() + i);
+      const fecha = new Date(fechaInicial);
+      fecha.setDate(fechaInicial.getDate() + i);
 
-    for (let hora = 9; hora <= 12; hora++) {
-      const horario = new Date(fecha);
-      horario.setHours(hora, 0, 0);
-      fechasYHorarios.push(horario);
-    }
+      for (let hora = 9; hora <= 12; hora++) {
+          const horario = new Date(fecha);
+          horario.setHours(hora, 0, 0);
+          fechasYHorarios.push(horario);
+      }
   }
   return fechasYHorarios;
 }
 
-// Manipular DOM al cargar
-document.getElementById("calcular").addEventListener("click", function() {
+// Evento cuando el formulario se envía
+document.getElementById("obra-social-form").addEventListener("submit", function(event) {
+  event.preventDefault(); // Evita el comportamiento predeterminado de recargar la página
+
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;
   const plan = document.getElementById("plan").value;
@@ -63,50 +65,68 @@ document.getElementById("calcular").addEventListener("click", function() {
   const incluyeVision = document.getElementById("vision").checked;
 
   // Validaciones
-  if (nombre === "" || apellido === "" || edad === "") {
-    alert("Por favor, complete todos los campos obligatorios.");
-    return;
-  }
-
-  if (edad <= 0 || isNaN(edad)) {
-    alert("Por favor, ingrese una edad válida (mayor a 0).");
-    return;
+  if (!nombre || !apellido || !edad || edad <= 0) {
+      alert("Por favor, complete todos los campos obligatorios correctamente.");
+      return;
   }
 
   const costoFinal = calcularCosto(plan, parseInt(edad), incluyeDental, incluyeVision);
 
+  // Crear un objeto con los datos del usuario
+  const datosUsuario = {
+      nombre: nombre,
+      apellido: apellido,
+      planSeleccionado: plan,
+      edad: edad,
+      incluyeDental: incluyeDental,
+      incluyeVision: incluyeVision,
+      costoFinal: costoFinal
+  };
+
+  // Almacenar en localStorage usando JSON
+  localStorage.setItem("datosUsuario", JSON.stringify(datosUsuario));
+
   document.getElementById("resultado").innerHTML = `El costo final es: $${costoFinal}`;
 
-  // Guardar en localStorage
-  localStorage.setItem("nombre", nombre);
-  localStorage.setItem("apellido", apellido);
-  localStorage.setItem("planSeleccionado", plan);
-  localStorage.setItem("edad", edad);
-  localStorage.setItem("costoFinal", costoFinal);
-
   // Mostrar la sección de fechas y horarios
+  mostrarFechasYHorarios();
+});
+
+// Función para mostrar las fechas y horarios
+function mostrarFechasYHorarios() {
   const fechasYHorarios = generarFechasYHorarios();
   const selectFechas = document.getElementById("fechas");
   selectFechas.innerHTML = "";
 
   fechasYHorarios.forEach((fechaHora, index) => {
-    const option = document.createElement("option");
-    option.value = fechaHora.toLocaleString();
-    option.textContent = fechaHora.toLocaleString();
-    selectFechas.appendChild(option);
+      const option = document.createElement("option");
+      option.value = fechaHora.toLocaleString();
+      option.textContent = fechaHora.toLocaleString();
+      selectFechas.appendChild(option);
   });
 
   document.getElementById("fechas-horarios").style.display = "block";
-});
+}
 
-// Manejar la selección de la fecha y agendar el turno
+// Evento cuando se selecciona una fecha y horario
 document.getElementById("agendar").addEventListener("click", function() {
   const fechaSeleccionada = document.getElementById("fechas").value;
+  if (!fechaSeleccionada) {
+      alert("Por favor, seleccione una fecha y horario.");
+      return;
+  }
+
+  // Recuperar datos del usuario desde localStorage
+  const datosUsuario = JSON.parse(localStorage.getItem("datosUsuario"));
+
+  // Añadir la fecha seleccionada al objeto de datos
+  datosUsuario.fechaTurno = fechaSeleccionada;
+
+  // Guardar nuevamente en localStorage con la fecha seleccionada
+  localStorage.setItem("datosUsuario", JSON.stringify(datosUsuario));
+
   alert(`Su turno ha sido agendado para: ${fechaSeleccionada}`);
 
-  // Guardar fecha seleccionada en localStorage
-  localStorage.setItem("fechaTurno", fechaSeleccionada);
-
-  // Mostrar en consola
-  console.log(`Su horario es: ${fechaSeleccionada}`);
+  // Mostrar en consola el JSON completo
+  console.log("Datos completos del usuario:", datosUsuario);
 });

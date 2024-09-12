@@ -7,44 +7,44 @@
     <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-    <h1>Bienvenido a nuestra Obra Social</h1>
-    
+    <h1>Cotización de Obra Social</h1>
+
     <form id="obra-social-form">
         <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" required><br>
+        <input type="text" id="nombre" name="nombre" required>
 
         <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" required><br>
+        <input type="text" id="apellido" name="apellido" required>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" required>
 
         <label for="plan">Seleccione un plan:</label>
-        <select id="plan" required>
+        <select id="plan" name="plan" required>
             <option value="Plan V1">Plan V1 - $10000</option>
             <option value="Plan V2">Plan V2 - $15000</option>
             <option value="Plan V3">Plan V3 - $30000</option>
-        </select><br>
+        </select>
 
-        <label for="edad">Edad:</label>
-        <input type="number" id="edad" min="1" required><br>
+        <label for="dental">
+            <input type="checkbox" id="dental" name="dental"> Incluir cobertura dental (+$5000)
+        </label>
 
-        <label>
-            <input type="checkbox" id="dental"> Incluir cobertura dental (+ $5000)
-        </label><br>
+        <label for="vision">
+            <input type="checkbox" id="vision" name="vision"> Incluir cobertura de visión (+$10500)
+        </label>
 
-        <label>
-            <input type="checkbox" id="vision"> Incluir cobertura de visión (+ $10500)
-        </label><br>
-
-        <button type="button" id="calcular">Calcular Costo</button>
+        <button type="submit">Calcular Costo</button>
     </form>
 
     <div id="resultado"></div>
-    
-    <div id="fechas-horarios" style="display: none;">
-        <h2>Seleccione una fecha y horario</h2>
-        <select id="fechas"></select><br>
-        <button type="button" id="agendar">Agendar Turno</button>
+
+    <div id="fechas-horarios">
+        <h2>Seleccione Fecha y Horario</h2>
+        <select id="fechas"></select>
+        <button id="agendar">Agendar Turno</button>
     </div>
 
-    <script src=".js/index.js"></script>
+    <script src="./js/index.js"></script>
 </body>
 </html>
