@@ -3,18 +3,41 @@
     margin: 0;
     box-sizing: border-box;
   }
-main {
-    margin: 0;
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    min-height: 75vh;
   }
-
-footer {
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    flex-shrink: 0;
-    border-top: solid 1px #b8c1ec;
+  
+  h1 {
+    color: #333;
   }
+  
+  form label {
+    display: block;
+    margin: 10px 0 5px;
+  }
+  
+  input, select {
+    padding: 5px;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  #resultado {
+    margin-top: 20px;
+    font-weight: bold;
+  }  

@@ -1,45 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Obra social</title>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obra Social</title>
     <link rel="stylesheet" href="./css/main.css">
-  </head>
-  <body>
-    <header>
-      <ul>
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Cotizador</a></li>
-        <li><a href="#">Nosotros</a></li>
-      </ul>
-    </header>
-    <main>
-      <h1>Cotizador plan de obra social privada</h1>
-    </main>
-    <footer>
-      <div>
-        <ul>
-          <li><a href="#">Inicio</a></li>
-          <li><a href="#">Cotizador</a></li>
-          <li><a href="#">Nosotros</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Información de la empresa</h3>
-        <p>Dirección: 123 Calle Principal, Ciudad</p>
-        <p>Teléfono: 555-1234</p>
-        <p>Correo electrónico: info@obrasocial.com</p>
-      </div>
-      <div>
-        <h3>Redes Sociales</h3>
-        <ul>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Twitter</a></li>
-          <li><a href="#">Instagram</a></li>
-        </ul>
-      </div>
-    </footer>
-    <script src="./js/index.js"></script>
-  </body>
+</head>
+<body>
+    <h1>Bienvenido a nuestra Obra Social</h1>
+    
+    <form id="obra-social-form">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required><br>
+
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" required><br>
+
+        <label for="plan">Seleccione un plan:</label>
+        <select id="plan" required>
+            <option value="Plan V1">Plan V1 - $10000</option>
+            <option value="Plan V2">Plan V2 - $15000</option>
+            <option value="Plan V3">Plan V3 - $30000</option>
+        </select><br>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" required><br>
+
+        <label>
+            <input type="checkbox" id="dental"> Incluir cobertura dental (+ $5000)
+        </label><br>
+
+        <label>
+            <input type="checkbox" id="vision"> Incluir cobertura de visión (+ $10500)
+        </label><br>
+
+        <button type="button" id="calcular">Calcular Costo</button>
+    </form>
+
+    <div id="resultado"></div>
+    
+    <div id="fechas-horarios" style="display: none;">
+        <h2>Seleccione una fecha y horario</h2>
+        <select id="fechas"></select><br>
+        <button type="button" id="agendar">Agendar Turno</button>
+    </div>
+
+    <script src="index.html"></script>
+</body>
 </html>
