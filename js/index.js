@@ -58,11 +58,22 @@ document.getElementById("calcular").addEventListener("click", function() {
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;
   const plan = document.getElementById("plan").value;
-  const edad = parseInt(document.getElementById("edad").value);
+  const edad = document.getElementById("edad").value;
   const incluyeDental = document.getElementById("dental").checked;
   const incluyeVision = document.getElementById("vision").checked;
 
-  const costoFinal = calcularCosto(plan, edad, incluyeDental, incluyeVision);
+  // Validaciones
+  if (nombre === "" || apellido === "" || edad === "") {
+    alert("Por favor, complete todos los campos obligatorios.");
+    return;
+  }
+
+  if (edad <= 0 || isNaN(edad)) {
+    alert("Por favor, ingrese una edad válida (mayor a 0).");
+    return;
+  }
+
+  const costoFinal = calcularCosto(plan, parseInt(edad), incluyeDental, incluyeVision);
 
   document.getElementById("resultado").innerHTML = `El costo final es: $${costoFinal}`;
 
