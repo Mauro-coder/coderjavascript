@@ -42,7 +42,7 @@ function calcularCosto(planSeleccionado, edad, incluyeDental, incluyeVision) {
   return costoTotal;
 }
 
-// Función para generar las fechas y horarios a partir de la fecha actual
+// Función para generar dinámicamente fechas y horarios a partir de la fecha actual
 function generarFechasYHorarios() {
   const hoy = new Date(); // Fecha actual
   const fechas = [];
@@ -70,6 +70,46 @@ function generarFechasYHorarios() {
   });
 
   document.getElementById("fechas-horarios").style.display = "block";
+}
+
+// Función para enviar los datos al servidor usando fetch de manera asincrónica
+async function enviarDatosTurno(datosUsuario, fechaSeleccionada) {
+  try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+          method: 'POST',
+          body: JSON.stringify(datosUsuario),
+          headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+          },
+      });
+
+      if (!response.ok) {
+          throw new Error('Error al agendar el turno');
+      }
+
+      const data = await response.json();
+
+      // Si todo sale bien, mostramos el SweetAlert
+      Swal.fire({
+          icon: 'success',
+          title: 'Turno Agendado',
+          text: `Su turno ha sido agendado para: ${fechaSeleccionada}`,
+          confirmButtonText: 'Aceptar'
+      });
+
+      console.log("Datos enviados correctamente al servidor:", data);
+
+  } catch (error) {
+      // Manejo de error si la petición falla
+      Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un problema al agendar su turno. Por favor, intente nuevamente.',
+          confirmButtonText: 'Aceptar'
+      });
+
+      console.error("Error al enviar los datos al servidor:", error);
+  }
 }
 
 // Evento para el envío del formulario
@@ -112,8 +152,8 @@ document.getElementById("obra-social-form").addEventListener("submit", function(
   generarFechasYHorarios();
 });
 
-// Evento para agendar el turno con manejo de fetch y promesas
-document.getElementById("agendar").addEventListener("click", function() {
+// Evento para agendar el turno con manejo asincrónico de fetch
+document.getElementById("agendar").addEventListener("click", async function() {
   const fechaSeleccionada = document.getElementById("fechas").value;
   if (!fechaSeleccionada) {
       Swal.fire({
@@ -129,40 +169,6 @@ document.getElementById("agendar").addEventListener("click", function() {
   const datosUsuario = JSON.parse(localStorage.getItem("datosUsuario"));
   datosUsuario.fechaTurno = fechaSeleccionada;
 
-  // Simulación de envío de datos al servidor
-  fetch('https://jsonplaceholder.typicode.com/posts', {
-      method: 'POST',
-      body: JSON.stringify(datosUsuario),
-      headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-      },
-  })
-  .then(response => {
-      if (!response.ok) {
-          throw new Error('Error al agendar el turno');
-      }
-      return response.json();
-  })
-  .then(data => {
-      // Si todo sale bien, mostramos el SweetAlert
-      Swal.fire({
-          icon: 'success',
-          title: 'Turno Agendado',
-          text: `Su turno ha sido agendado para: ${fechaSeleccionada}`,
-          confirmButtonText: 'Aceptar'
-      });
-
-      console.log("Datos enviados correctamente al servidor:", data);
-  })
-  .catch(error => {
-      // Manejo de error si la petición falla
-      Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Hubo un problema al agendar su turno. Por favor, intente nuevamente.',
-          confirmButtonText: 'Aceptar'
-      });
-
-      console.error("Error al enviar los datos al servidor:", error);
-  });
+  // Enviar los datos al servidor de manera asincrónica
+  await enviarDatosTurno(datosUsuario, fechaSeleccionada);
 });
