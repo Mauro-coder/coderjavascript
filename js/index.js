@@ -42,33 +42,26 @@ function calcularCosto(planSeleccionado, edad, incluyeDental, incluyeVision) {
   return costoTotal;
 }
 
-// Función para mostrar fechas y horarios
-function mostrarFechasYHorarios() {
-  const fechas = [
-      "2024-09-09 09:00",
-      "2024-09-09 10:00",
-      "2024-09-09 11:00",
-      "2024-09-09 12:00",
-      "2024-09-10 09:00",
-      "2024-09-10 10:00",
-      "2024-09-10 11:00",
-      "2024-09-10 12:00",
-      "2024-09-11 09:00",
-      "2024-09-11 10:00",
-      "2024-09-11 11:00",
-      "2024-09-11 12:00",
-      "2024-09-12 09:00",
-      "2024-09-12 10:00",
-      "2024-09-12 11:00",
-      "2024-09-12 12:00",
-      "2024-09-13 09:00",
-      "2024-09-13 10:00",
-      "2024-09-13 11:00",
-      "2024-09-13 12:00",
-  ];
+// Función para generar las fechas y horarios a partir de la fecha actual
+function generarFechasYHorarios() {
+  const hoy = new Date(); // Fecha actual
+  const fechas = [];
+
+  // Generamos fechas para los próximos 5 días
+  for (let i = 0; i < 5; i++) {
+      let fecha = new Date();
+      fecha.setDate(hoy.getDate() + i); // Sumamos días a la fecha actual
+      const opcionesHorarios = ["09:00", "10:00", "11:00", "12:00"];
+
+      // Agregamos la fecha y horarios
+      opcionesHorarios.forEach(horario => {
+          const fechaCompleta = `${fecha.toLocaleDateString()} ${horario}`;
+          fechas.push(fechaCompleta);
+      });
+  }
 
   const fechasSelect = document.getElementById("fechas");
-  fechasSelect.innerHTML = "";
+  fechasSelect.innerHTML = ""; // Limpiamos las opciones previas
   fechas.forEach(fecha => {
       const option = document.createElement("option");
       option.value = fecha;
@@ -115,7 +108,8 @@ document.getElementById("obra-social-form").addEventListener("submit", function(
 
   document.getElementById("resultado").innerHTML = `El costo final es: $${costoFinal}`;
   
-  mostrarFechasYHorarios();
+  // Llamamos a la función que genera las fechas dinámicamente
+  generarFechasYHorarios();
 });
 
 // Evento para agendar el turno con manejo de fetch y promesas
