@@ -118,7 +118,7 @@ document.getElementById("obra-social-form").addEventListener("submit", function(
   mostrarFechasYHorarios();
 });
 
-// Evento para agendar el turno
+// Evento para agendar el turno con manejo de fetch y promesas
 document.getElementById("agendar").addEventListener("click", function() {
   const fechaSeleccionada = document.getElementById("fechas").value;
   if (!fechaSeleccionada) {
@@ -131,16 +131,44 @@ document.getElementById("agendar").addEventListener("click", function() {
       return;
   }
 
+  // Recuperar datos del usuario desde localStorage
   const datosUsuario = JSON.parse(localStorage.getItem("datosUsuario"));
   datosUsuario.fechaTurno = fechaSeleccionada;
-  localStorage.setItem("datosUsuario", JSON.stringify(datosUsuario));
 
-  Swal.fire({
-      icon: 'success',
-      title: 'Turno Agendado',
-      text: `Su turno ha sido agendado para: ${fechaSeleccionada}`,
-      confirmButtonText: 'Aceptar'
+  // Simulación de envío de datos al servidor
+  fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      body: JSON.stringify(datosUsuario),
+      headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+      },
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Error al agendar el turno');
+      }
+      return response.json();
+  })
+  .then(data => {
+      // Si todo sale bien, mostramos el SweetAlert
+      Swal.fire({
+          icon: 'success',
+          title: 'Turno Agendado',
+          text: `Su turno ha sido agendado para: ${fechaSeleccionada}`,
+          confirmButtonText: 'Aceptar'
+      });
+
+      console.log("Datos enviados correctamente al servidor:", data);
+  })
+  .catch(error => {
+      // Manejo de error si la petición falla
+      Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un problema al agendar su turno. Por favor, intente nuevamente.',
+          confirmButtonText: 'Aceptar'
+      });
+
+      console.error("Error al enviar los datos al servidor:", error);
   });
-
-  console.log("Datos completos del usuario:", datosUsuario);
 });
