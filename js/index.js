@@ -1,24 +1,26 @@
 // Variables y constantes globales
-const PLANES = {
-  "Plan V1": 10000,
-  "Plan V2": 15000,
-  "Plan V3": 30000
-};
+const PLANES = [
+  { nombre: "Plan V1", precio: 10000 },
+  { nombre: "Plan V2", precio: 15000 },
+  { nombre: "Plan V3", precio: 30000 },
+];
 
 const EDAD_FACTORES = {
   menor30: 1,
   entre30y60: 1.5,
-  mayor60: 2
+  mayor60: 2,
 };
 
 const COBERTURA_ADICIONAL = {
   dental: 5000,
-  vision: 10500
+  vision: 10500,
 };
 
 // Función para calcular el costo total
-function calcularCosto(plan, edad, incluyeDental, incluyeVision) {
-  let factorEdad = 1;
+function calcularCosto(planSeleccionado, edad, incluyeDental, incluyeVision) {
+  const plan = PLANES.find((p) => p.nombre === planSeleccionado);
+  let factorEdad;
+
   if (edad < 30) {
       factorEdad = EDAD_FACTORES.menor30;
   } else if (edad <= 60) {
@@ -27,33 +29,57 @@ function calcularCosto(plan, edad, incluyeDental, incluyeVision) {
       factorEdad = EDAD_FACTORES.mayor60;
   }
 
-  let costoTotal = PLANES[plan] * factorEdad;
+  let costoTotal = plan.precio * factorEdad;
 
-  if (incluyeDental) costoTotal += COBERTURA_ADICIONAL.dental;
-  if (incluyeVision) costoTotal += COBERTURA_ADICIONAL.vision;
+  if (incluyeDental) {
+      costoTotal += COBERTURA_ADICIONAL.dental;
+  }
+
+  if (incluyeVision) {
+      costoTotal += COBERTURA_ADICIONAL.vision;
+  }
 
   return costoTotal;
 }
 
-// Función para generar las fechas y horarios disponibles
-function generarFechasYHorarios() {
-  const fechasYHorarios = [];
-  const fechaInicial = new Date(2024, 8, 9);
+// Función para mostrar fechas y horarios
+function mostrarFechasYHorarios() {
+  const fechas = [
+      "2024-09-09 09:00",
+      "2024-09-09 10:00",
+      "2024-09-09 11:00",
+      "2024-09-09 12:00",
+      "2024-09-10 09:00",
+      "2024-09-10 10:00",
+      "2024-09-10 11:00",
+      "2024-09-10 12:00",
+      "2024-09-11 09:00",
+      "2024-09-11 10:00",
+      "2024-09-11 11:00",
+      "2024-09-11 12:00",
+      "2024-09-12 09:00",
+      "2024-09-12 10:00",
+      "2024-09-12 11:00",
+      "2024-09-12 12:00",
+      "2024-09-13 09:00",
+      "2024-09-13 10:00",
+      "2024-09-13 11:00",
+      "2024-09-13 12:00",
+  ];
 
-  for (let i = 0; i < 5; i++) {
-      const fecha = new Date(fechaInicial);
-      fecha.setDate(fechaInicial.getDate() + i);
+  const fechasSelect = document.getElementById("fechas");
+  fechasSelect.innerHTML = "";
+  fechas.forEach(fecha => {
+      const option = document.createElement("option");
+      option.value = fecha;
+      option.textContent = fecha;
+      fechasSelect.appendChild(option);
+  });
 
-      for (let hora = 9; hora <= 12; hora++) {
-          const horario = new Date(fecha);
-          horario.setHours(hora, 0, 0);
-          fechasYHorarios.push(horario);
-      }
-  }
-  return fechasYHorarios;
+  document.getElementById("fechas-horarios").style.display = "block";
 }
 
-// Evento cuando el formulario se envía
+// Evento para el envío del formulario
 document.getElementById("obra-social-form").addEventListener("submit", function(event) {
   event.preventDefault();
 
@@ -64,15 +90,18 @@ document.getElementById("obra-social-form").addEventListener("submit", function(
   const incluyeDental = document.getElementById("dental").checked;
   const incluyeVision = document.getElementById("vision").checked;
 
-  // Validaciones
   if (!nombre || !apellido || !edad || edad <= 0) {
-      alert("Por favor, complete todos los campos obligatorios correctamente.");
+      Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Por favor, complete todos los campos obligatorios correctamente.',
+          confirmButtonText: 'Aceptar'
+      });
       return;
   }
 
   const costoFinal = calcularCosto(plan, parseInt(edad), incluyeDental, incluyeVision);
 
-  // Crear un objeto con los datos del usuario
   const datosUsuario = {
       nombre: nombre,
       apellido: apellido,
@@ -82,51 +111,36 @@ document.getElementById("obra-social-form").addEventListener("submit", function(
       incluyeVision: incluyeVision,
       costoFinal: costoFinal
   };
-
-  // Almacenar en localStorage usando JSON
   localStorage.setItem("datosUsuario", JSON.stringify(datosUsuario));
 
   document.getElementById("resultado").innerHTML = `El costo final es: $${costoFinal}`;
-
-  // Mostrar la sección de fechas y horarios
+  
   mostrarFechasYHorarios();
 });
 
-// Función para mostrar las fechas y horarios
-function mostrarFechasYHorarios() {
-  const fechasYHorarios = generarFechasYHorarios();
-  const selectFechas = document.getElementById("fechas");
-  selectFechas.innerHTML = "";
-
-  fechasYHorarios.forEach((fechaHora, index) => {
-      const option = document.createElement("option");
-      option.value = fechaHora.toLocaleString();
-      option.textContent = fechaHora.toLocaleString();
-      selectFechas.appendChild(option);
-  });
-
-  document.getElementById("fechas-horarios").style.display = "block";
-}
-
-// Evento cuando se selecciona una fecha y horario
+// Evento para agendar el turno
 document.getElementById("agendar").addEventListener("click", function() {
   const fechaSeleccionada = document.getElementById("fechas").value;
   if (!fechaSeleccionada) {
-      alert("Por favor, seleccione una fecha y horario.");
+      Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Por favor, seleccione una fecha y horario.',
+          confirmButtonText: 'Aceptar'
+      });
       return;
   }
 
-  // Recuperar datos del usuario desde localStorage
   const datosUsuario = JSON.parse(localStorage.getItem("datosUsuario"));
-
-  // Añadir la fecha seleccionada al objeto de datos
   datosUsuario.fechaTurno = fechaSeleccionada;
-
-  // Guardar nuevamente en localStorage con la fecha seleccionada
   localStorage.setItem("datosUsuario", JSON.stringify(datosUsuario));
 
-  alert(`Su turno ha sido agendado para: ${fechaSeleccionada}`);
+  Swal.fire({
+      icon: 'success',
+      title: 'Turno Agendado',
+      text: `Su turno ha sido agendado para: ${fechaSeleccionada}`,
+      confirmButtonText: 'Aceptar'
+  });
 
-  // Mostrar en consola el JSON completo
   console.log("Datos completos del usuario:", datosUsuario);
 });
